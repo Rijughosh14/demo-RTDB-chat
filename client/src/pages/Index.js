@@ -11,7 +11,6 @@ const Index = () => {
     const [TextValue,SetTextValue]=useState('')
 
     const [messages, setMessages] = useState({});
-    console.log(messages)
 
   useEffect(() => {
     // Create a reference to the "messages" node
