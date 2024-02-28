@@ -9,6 +9,7 @@ const Home = () => {
 
   const [messages, setMessages] = useState({});
   const [TextValue, SetTextValue] = useState('');
+  // detail of user id
   const [userData, SetUserData] = useState(null);
   const [watchdata,Setwatchdata]=useState('')
 
@@ -31,6 +32,15 @@ const Home = () => {
     }
   }
 
+  
+  useEffect(()=>{
+    if(inputRef.current){
+      inputRef.current.focus()
+      console.log("first")
+    }
+  },[inputRef.current])
+  
+
   useEffect(() => {
     const result = getUserSession()
     SetUserData(result)
@@ -39,13 +49,8 @@ const Home = () => {
     return()=>{
       defaultFunction(-1)
     }
-  }, [])
+},[])
 
-  useEffect(()=>{
-    if(inputRef.current){
-      inputRef.current.focus()
-    }
-  },[])
 
   useEffect(() => {
     // Create a reference to the "messages" node
@@ -75,31 +80,28 @@ const Home = () => {
     }
   }
 
-  const taketurn=()=>{
-    if(userData){
-      updateTurn(userData)
+  const taketurn=(event)=>{
+    if(event.key==='Enter'){
+      if(userData){
+        updateTurn(userData)
+      }
     }
   }
 
   return (
-    <div id='home'>
+    <div id='home' onKeyDown={taketurn} tabIndex={0}>
       <div id='watching-div'>
         <p>
           Watching:{watchdata}
         </p>
       </div>
-      <div id='message'>
+      {messages.TurnId===userData?<div className='word'>
+      <input type="text" ref={inputRef} value={TextValue} onChange={(e) => SetTextValue(e.target.value)} onKeyDown={handleSendText} />
+      </div>: <div className='word'>
         <p>
           {messages.Message}
         </p>
-      </div>
-      {messages.TurnId===userData?<div id='input-div'>
-      <input type="text" ref={inputRef} value={TextValue} onChange={(e) => SetTextValue(e.target.value)} onKeyDown={handleSendText} />
-      </div>:<div>
-        <button onClick={taketurn}>
-          take turn
-        </button>
-        </div>}
+      </div>}
       {/* <button onClick={handleSendText}>
         send
       </button> */}
