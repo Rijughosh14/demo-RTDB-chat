@@ -1,4 +1,5 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { updateCurrentPresence, updateMessage, updateTurn, updateWatching } from '../../../services/FireBaseFunction';
 
 
@@ -9,7 +10,7 @@ import { updateCurrentPresence, updateMessage, updateTurn, updateWatching } from
 const HomeComponents = ({LiveData,userData}) => {
 
     const inputRef=useRef(null)
-
+    const navigate=useNavigate(null)
 
 
     const [TextValue, SetTextValue] = useState('');
@@ -37,6 +38,11 @@ const HomeComponents = ({LiveData,userData}) => {
           SetTextValue('')
         }
       }
+
+    const navigateToProfile=(event)=>{
+        event.stopPropagation()
+        navigate(`/profile/?profileid=${LiveData?.userId}`)
+    }
 
     useEffect(()=>{
         if(userData!==LiveData?.userId){
@@ -67,7 +73,7 @@ const HomeComponents = ({LiveData,userData}) => {
     LiveData?.presence?.status==="online"?
     <div onKeyDown={keytaketurn} 
     onClick={taketurn} tabIndex={0}>
-        <div id='watching-div' >
+        <div id='watching-div' onClick={navigateToProfile} >
         userid:{LiveData?.userId}
       </div>
       {LiveData?.messages?.TurnId===userData?<div className='word'>
