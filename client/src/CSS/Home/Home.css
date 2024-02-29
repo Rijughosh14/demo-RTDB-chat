@@ -19,7 +19,7 @@
     width: 95vw;
     height: 65px;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
     /* padding-right: 4px; */
     /* margin-right: 8px; */

@@ -36,9 +36,8 @@ const Home = () => {
   useEffect(()=>{
     if(inputRef.current){
       inputRef.current.focus()
-      console.log("first")
     }
-  },[inputRef.current])
+  },[])
   
 
   useEffect(() => {

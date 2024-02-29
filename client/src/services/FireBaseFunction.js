@@ -16,18 +16,18 @@ export const getCurrentWatching=async()=>{
    return response.val();
 }
 
-export const updateWatching = ( updatedValue) => { 
+export const updateWatching = async( updatedValue) => { 
    const updateObject = {};
    updateObject["watching"] = updatedValue;
+
+   try {
+     // Use the update method to modify only the specified key
+     await databaseRef.update(updateObject)
+    
+   } catch (error) {
+    console.log(error)
+   }
  
-   // Use the update method to modify only the specified key
-   databaseRef.update(updateObject)
-     .then(() => {
-       console.log('Message updated successfully.');
-     })
-     .catch((error) => {
-       console.error('Error updating message:', error.message);
-     });
  };
 
  export const updateMessage=async(msg)=>{
