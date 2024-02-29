@@ -1,0 +1,90 @@
+import React, { memo, useEffect, useRef, useState } from 'react'
+import { updateCurrentPresence, updateMessage, updateTurn, updateWatching } from '../../../services/FireBaseFunction';
+
+
+
+
+
+
+const HomeComponents = ({LiveData,userData}) => {
+
+    const inputRef=useRef(null)
+
+
+
+    const [TextValue, SetTextValue] = useState('');
+
+    const taketurn = () => {
+          if (userData) {
+             updateTurn(LiveData?.userId,userData)
+          }
+        
+      }
+
+    const keytaketurn = (event) => {
+        if (event.key === 'Enter') {
+          if (userData) {
+             updateTurn(LiveData?.userId,userData)
+          }
+        }
+      }
+
+
+    const handleSendText = (event) => {
+        if (userData&&event.key===' ') {
+
+          updateMessage(LiveData?.userId,TextValue)
+          SetTextValue('')
+        }
+      }
+
+    useEffect(()=>{
+        if(userData!==LiveData?.userId){
+            updateWatching(LiveData?.userId,LiveData?.messages?.listener+1)
+            updateCurrentPresence(userData,LiveData?.userId,"busy")           
+        }
+        else{
+            updateCurrentPresence(userData,LiveData?.userId,"online")
+        }
+
+        return()=>{
+            if(userData!==LiveData?.userId){
+    
+                updateWatching(LiveData?.userId,LiveData?.messages?.listener-1)        
+            }
+        }
+    },[LiveData?.userId])
+
+
+    useEffect(()=>{
+        if(inputRef.current){
+          inputRef.current.focus()
+        }
+      },[])
+
+
+  return (
+    LiveData?.presence?.status==="online"?
+    <div onKeyDown={keytaketurn} 
+    onClick={taketurn} tabIndex={0}>
+        <div id='watching-div' >
+        userid:{LiveData?.userId}
+      </div>
+      {LiveData?.messages?.TurnId===userData?<div className='word'>
+      <input type="text" ref={inputRef} value={TextValue} onChange={(e) => SetTextValue(e.target.value)} onKeyDown={handleSendText} />
+      </div>: <div className='word'>
+        <h1>
+          {LiveData?.messages?.Message}
+        </h1>
+      </div>}
+      <p>
+          Watching: {LiveData?.messages?.listener}
+        </p>
+    </div>:(LiveData?.presence?.status==='busy'&&
+    <div>
+       {LiveData?.userId} Busy, Present at {LiveData?.presence?.space}
+    </div>)
+  )
+}
+
+export default memo(HomeComponents)
