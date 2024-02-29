@@ -92,15 +92,15 @@ const Home = () => {
     <div id='home' onKeyDown={taketurn} tabIndex={0}>
       <div id='watching-div'>
         <p>
-          Watching:{watchdata}
+          Watching: {watchdata}
         </p>
       </div>
       {messages.TurnId===userData?<div className='word'>
       <input type="text" ref={inputRef} value={TextValue} onChange={(e) => SetTextValue(e.target.value)} onKeyDown={handleSendText} />
       </div>: <div className='word'>
-        <p>
+        <h1>
           {messages.Message}
-        </p>
+        </h1>
       </div>}
       {/* <button onClick={handleSendText}>
         send
