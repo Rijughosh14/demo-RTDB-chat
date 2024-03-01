@@ -1,7 +1,9 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { updateCurrentPresence, updateMessage, updateTurn, updateWatching } from '../../../services/FireBaseFunction';
-import { getUserSession } from '../../../services/UserService';
+import { getUserSession, StoreToLocalStorage } from '../../../services/UserService';
+
+
 
 
 
@@ -33,6 +35,9 @@ const HomeComponents = ({LiveData}) => {
     const handleSendText = (event) => {
         if (userData&&(event.key===' '||event.key==='Spacebar')) {
           updateMessage(LiveData?.userId,TextValue)
+          if(LiveData?.userId===userData){
+            StoreToLocalStorage(userData,new Date(),TextValue)
+          }
           SetTextValue('')
         }
       }
