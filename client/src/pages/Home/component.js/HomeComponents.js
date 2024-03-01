@@ -4,9 +4,6 @@ import { updateCurrentPresence, updateMessage, updateTurn, updateWatching } from
 
 
 
-
-
-
 const HomeComponents = ({LiveData,userData}) => {
 
     const inputRef=useRef(null)
@@ -32,8 +29,7 @@ const HomeComponents = ({LiveData,userData}) => {
 
 
     const handleSendText = (event) => {
-        if (userData&&event.key===' ') {
-
+        if (userData&&(event.key===' '||event.key==='Spacebar')) {
           updateMessage(LiveData?.userId,TextValue)
           SetTextValue('')
         }
@@ -59,7 +55,7 @@ const HomeComponents = ({LiveData,userData}) => {
                 updateWatching(LiveData?.userId,LiveData?.messages?.listener-1)        
             }
         }
-    },[LiveData?.userId])
+    },[userData,LiveData?.userId])
 
 
     useEffect(()=>{
@@ -72,7 +68,7 @@ const HomeComponents = ({LiveData,userData}) => {
   return (
     LiveData?.presence?.status==="online"?
     <div onKeyDown={keytaketurn} 
-    onClick={taketurn} tabIndex={0}>
+    onClick={taketurn}>
         <div id='watching-div' onClick={navigateToProfile} >
         userid:{LiveData?.userId}
       </div>
