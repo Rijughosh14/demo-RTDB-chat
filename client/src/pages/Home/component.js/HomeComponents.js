@@ -1,13 +1,15 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { updateCurrentPresence, updateMessage, updateTurn, updateWatching } from '../../../services/FireBaseFunction';
+import { getUserSession } from '../../../services/UserService';
 
 
 
-const HomeComponents = ({LiveData,userData}) => {
+const HomeComponents = ({LiveData}) => {
 
     const inputRef=useRef(null)
     const navigate=useNavigate(null)
+    const userData=getUserSession()
 
 
     const [TextValue, SetTextValue] = useState('');
@@ -41,6 +43,13 @@ const HomeComponents = ({LiveData,userData}) => {
     }
 
     useEffect(()=>{
+      if(inputRef.current){
+        inputRef.current.focus()
+      }
+    },[])
+
+    useEffect(()=>{
+      if(LiveData?.userId){
         if(userData!==LiveData?.userId){
             updateWatching(LiveData?.userId,LiveData?.messages?.listener+1)
             updateCurrentPresence(userData,LiveData?.userId,"busy")           
@@ -49,20 +58,14 @@ const HomeComponents = ({LiveData,userData}) => {
             updateCurrentPresence(userData,LiveData?.userId,"online")
         }
 
-        return()=>{
-            if(userData!==LiveData?.userId){
+        // return()=>{
+        //     if(userData!==LiveData?.userId){
     
-                updateWatching(LiveData?.userId,LiveData?.messages?.listener-1)        
-            }
-        }
+        //         updateWatching(LiveData?.userId,LiveData?.messages?.listener-1)        
+        //     }
+        // }
+      }
     },[userData,LiveData?.userId])
-
-
-    useEffect(()=>{
-        if(inputRef.current){
-          inputRef.current.focus()
-        }
-      },[])
 
 
   return (
