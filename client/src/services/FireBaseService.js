@@ -3,6 +3,8 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import "firebase/compat/database";
+import "firebase/compat/firestore";
+
 
 // import 'firebase/compat/auth';
 // import { getAnalytics } from "firebase/analytics";
@@ -13,5 +15,9 @@ import firebaseConfig from "../config/FireBase";
  firebase.initializeApp(firebaseConfig);
 // const analytics = getAnalytics(FirebaseApp);
 //  export const auth=getAuth(FirebaseApp);
+
+
+// Initialize Cloud Firestore and get a reference to the service
+export const firestoredb = firebase.firestore();
 
 export default firebase
