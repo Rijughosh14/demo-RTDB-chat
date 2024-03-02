@@ -49,7 +49,7 @@ export const StoreToLocalStorage=async(profileid,Time,message)=>{
         text:message
     };
 
-    if(result.messages.length===10){
+    if(result.messages.length%10===0){
         await pushCallMsgToFirestore(profileid,result.callid,result.messages)
         // result.messages=[]
     }
