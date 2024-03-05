@@ -77,10 +77,10 @@ const Home = () => {
   return (
     <div id='home' >
       <HomeComponents LiveData={LiveData[currentIndex]} userData={userData} />
-      {currentIndex> 0 && <button onClick={handleUpclick}>Up</button>
+      {/* {currentIndex> 0 && <button onClick={handleUpclick}>Up</button>
       }
       {currentIndex < LiveData.length - 1 && <button onClick={handleDownclick}>Down</button>
-      }
+      } */}
     </div>
   )
 }

@@ -12,8 +12,9 @@ function App() {
   return (
     <>
       <Routes>
-      <Route index element={<Home/>}/>
-      <Route path='/profile' element={<Profile/>}/>
+      <Route index element={<Index/>}/>
+      {/* <Route index path='/home' element={<Home/>}/>
+      <Route path='/profile' element={<Profile/>}/> */}
       </Routes>
     </>
   );

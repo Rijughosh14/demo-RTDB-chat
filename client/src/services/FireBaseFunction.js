@@ -27,6 +27,7 @@ export const signin=async()=>{
    )
 
    Cookies.set('userId',userid)
+   return userid
 }
 
 export const getCurrentLiveData=async()=>{
@@ -134,3 +135,20 @@ export const getCallById=async(userid,callid)=>{
     })
 }
 
+
+
+
+
+export const storeTextForUserId = (userId, text) => {
+  // Reference to your Firebase Realtime Database
+  const databaseRef = firebase.database().ref(userId);
+
+  // Set the value (text) associated with the userId
+  databaseRef.set(text)
+    .then(() => {
+      console.log(`Text stored successfully for userId: ${userId}`);
+    })
+    .catch((error) => {
+      console.error(`Error storing text for userId: ${userId}`, error);
+    });
+};
