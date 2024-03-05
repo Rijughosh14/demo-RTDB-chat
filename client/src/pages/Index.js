@@ -21,7 +21,12 @@ const Index = () => {
   const handleClick = async () => {
     try {
       const response=await signin()
-      navigate(`/?profileid=${response}`)
+      if(profileId){
+        return
+      }
+      else{
+        navigate(`/?profileid=${response}`)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -35,13 +40,8 @@ const Index = () => {
 
 
   useEffect(()=>{
-    if(profileId){
-      return
-    }
-    else{
       handleClick()
-    }
-  })
+  },[])
 
 
   useEffect(() => {
