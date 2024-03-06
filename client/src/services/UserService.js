@@ -97,4 +97,21 @@ export function extractDataFromQuerySnapshot(querySnapshot) {
       return doc.data();
     });
   }
+
+export function getFirstThreeLetters(inputId) {
+    if (typeof inputId === 'string' && inputId.length >= 3) {
+      return inputId.substring(0, 3);
+    } else {
+      return "Invalid input";
+    }
+  }
+
+  export const CreateSpaceId=(value, word)=>{
+        if (typeof value === 'string' && typeof word === 'string') {
+          return value + '-' + getFirstThreeLetters(word);
+        } else {
+          return "Invalid input";
+        }
+      
+  }
   
