@@ -45,23 +45,25 @@ const Index = () => {
 
 
   useEffect(() => {
-    // Reference to your Firebase Realtime Database
-    const databaseRef = firebase.database().ref(profileId);
-
-    // Set up the listener for value changes on the userId node
-    const onDataChange = (snapshot) => {
-      // The snapshot contains the current value (text) associated with the userId
-      const updatedText = snapshot.val();
-      SetTextValue(updatedText);
-      // console.log(`Value changed for userId: ${userId}. New text: ${updatedText}`);
-    };
-
-    databaseRef.on('value', onDataChange);
-
-    // Clean up the listener when the component unmounts
-    return () => {
-      databaseRef.off('value', onDataChange);
-    };
+    if(profileId){
+      // Reference to your Firebase Realtime Database
+      const databaseRef = firebase.database().ref(profileId);
+  
+      // Set up the listener for value changes on the userId node
+      const onDataChange = (snapshot) => {
+        // The snapshot contains the current value (text) associated with the userId
+        const updatedText = snapshot.val();
+        SetTextValue(updatedText);
+        // console.log(`Value changed for userId: ${userId}. New text: ${updatedText}`);
+      };
+  
+      databaseRef.on('value', onDataChange);
+  
+      // Clean up the listener when the component unmounts
+      return () => {
+        databaseRef.off('value', onDataChange);
+      };
+    }
   }, [profileId]);
 
   return (
