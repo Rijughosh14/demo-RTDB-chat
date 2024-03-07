@@ -1,6 +1,8 @@
 import './App.css';
 import { Routes, Route } from "react-router-dom";
 import Index from './pages/Index';
+import { signin } from './services/FireBaseFunction';
+import { useEffect } from 'react';
 // import Home from './pages/Home/Home';
 // import Profile from './pages/Profile/Profile';
 
@@ -8,7 +10,10 @@ import Index from './pages/Index';
 
 
 
+
+
 function App() {
+  
   return (
     <>
       <Routes>

@@ -12,24 +12,14 @@ const msgCollectionRef=firestoredb.collection('Message')
 export const signin=async()=>{
   const response=await firebase.auth().signInAnonymously()
   const userid=response.user.uid
-  //  firebase.database().ref('users/'+userid+'/messages').set(
-    //   {
-  //     Message:'',
-  //     TurnId:userid,
-  //     listener:1
-  //   }
-  //  )
-  //  firebase.database().ref('users/'+userid+'/presence').set(
-  //   {
-  //     space:`${userid}`,
-  //     status:'online'
-  //   }
-  //  )
-  
   Cookies.set('userId',userid)
   return userid
 }
-export const storeTextForUserId = (profileId, text,userid) => {
+
+export const SignInWithPassword=async()=>{
+
+}
+export const storeTextForUserId = (profileId, text) => {
   if(!profileId) return
   // Reference to your Firebase Realtime Database
   const databaseRef = firebase.database().ref(profileId);
@@ -37,8 +27,6 @@ export const storeTextForUserId = (profileId, text,userid) => {
   // Set the value (text) associated with the userId
   databaseRef.update({
     Text: text,
-    AuthorId: userid,
-    Time: firebase.database.ServerValue.TIMESTAMP
   })
     .then(() => {
       console.log(`Text stored successfully for userId: ${profileId}`);
@@ -110,9 +98,7 @@ export const updateListenerCount = async (userId, incrementValue = 1) => {
         // If the current data is null, initialize it with the Listener key
         return {
           Text: '',
-          AuthorId: '',
-          Listener:incrementValue,
-          Time: firebase.database.ServerValue.TIMESTAMP
+          Listener:incrementValue
         };
       } else if (typeof currentData === 'object' && 'Listener' in currentData) {
         // If the current data is an object with the Listener key, increment it

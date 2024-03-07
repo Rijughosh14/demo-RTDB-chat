@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { readPresence, signin, storeTextForUserId, updateListenerCount, updateValuesBasedOnCondition, writePresence } from '../services/FireBaseFunction'
+import { readPresence, signin, SignInWithPassword, storeTextForUserId, updateListenerCount, updateValuesBasedOnCondition, writePresence } from '../services/FireBaseFunction'
 import '../CSS/Index/Index.css'
 import firebase from '../services/FireBaseService'
 import { CreateSpaceId, getFirstThreeLetters, getUserSession } from '../services/UserService'
+
 
 
 
@@ -18,85 +19,97 @@ const Index = () => {
 
   const [Text,SetText]=useState('')
   const [Value,SetValue]=useState({})
-  const [CurrentPresence,SetCurrentPresence]=useState('')
-  console.log(Value)
+  // const [CurrentPresence,SetCurrentPresence]=useState('')
 
   const handleClick = async () => {
     try {
       const response=await signin()
-      if(profileId){
-        return
-      }
-      else{
-        navigate(`/?profileid=${response}`)
-      }
-    } catch (error) {
-      console.log(error)
-    }
+     // const response=await SignInWithPassword(UserName,PassWord)
+     if(profileId){
+       return
+     }
+     else{
+       navigate(`/?profileid=${response}`)
+     }
+   } catch (error) {
+     console.log(error)
+   }
+    
   }
 
-  const handlePresence=async()=>{
-    if(profileId){
-      const response=await readPresence(profileId)
-      if(response){
-        const result=CreateSpaceId(response,userid)
-        updateValuesBasedOnCondition(response,result)
-        await writePresence(userid,result)
-      }
-      else{
-       const result= getFirstThreeLetters(userid)
-       await writePresence(userid,result)
-      }
-    }
-  }
+  // const handlePresence=async()=>{
+  //   if(profileId){
+  //     const response=await readPresence(profileId)
+  //     if(response){
+  //       const result=CreateSpaceId(response,userid)
+  //       updateValuesBasedOnCondition(response,result)
+  //       await writePresence(userid,result)
+  //     }
+  //     else{
+  //      const result= getFirstThreeLetters(userid)
+  //      await writePresence(userid,result)
+  //     }
+  //   }
+  // }
 
   const sendText=async()=>{
     if(Text==='')return
-     storeTextForUserId(CurrentPresence,Text,userid)
+     storeTextForUserId(profileId,Text)
      SetText('')
+  }
+
+  const handleSetPresence=async()=>{
+    if(userid&&profileId){
+      if(userid===profileId){
+        updateListenerCount(profileId)
+      }
+      else{
+        await writePresence(userid,profileId)
+        updateListenerCount(profileId)
+      }
+    }
   }
 
 
   useEffect(()=>{
       handleClick()
-  },[])
+  },[getUserSession])
+
+  // useEffect(()=>{
+  //   handlePresence()
+  // },[profileId])
 
   useEffect(()=>{
-    handlePresence()
+    handleSetPresence()
   },[profileId])
 
-  useEffect(()=>{
-    updateListenerCount(CurrentPresence)
-  },[CurrentPresence])
 
-
-  useEffect(() => {
-    if(userid){
-      // Reference to your Firebase Realtime Database
-      const databaseRef = firebase.database().ref(userid);
+  // useEffect(() => {
+  //   if(userid){
+  //     // Reference to your Firebase Realtime Database
+  //     const databaseRef = firebase.database().ref(userid);
   
-      // Set up the listener for value changes on the userId node
-      const onDataChange = (snapshot) => {
-        // The snapshot contains the current value (text) associated with the userId
-        const value = snapshot.val();
-        SetCurrentPresence(value)
-        // console.log(`Value changed for userId: ${userId}. New text: ${updatedText}`);
-      };
+  //     // Set up the listener for value changes on the userId node
+  //     const onDataChange = (snapshot) => {
+  //       // The snapshot contains the current value (text) associated with the userId
+  //       const value = snapshot.val();
+  //       SetCurrentPresence(value)
+  //       // console.log(`Value changed for userId: ${userId}. New text: ${updatedText}`);
+  //     };
   
-      databaseRef.on('value', onDataChange);
+  //     databaseRef.on('value', onDataChange);
   
-      // Clean up the listener when the component unmounts
-      return () => {
-        databaseRef.off('value', onDataChange);
-      };
-    }
-  }, [userid]);
-console.log(CurrentPresence)
+  //     // Clean up the listener when the component unmounts
+  //     return () => {
+  //       databaseRef.off('value', onDataChange);
+  //     };
+  //   }
+  // }, [userid]);
 
   useEffect(() => {
-    if(CurrentPresence){
+    if(profileId){
       // Reference to your Firebase Realtime Database
-      const databaseRef = firebase.database().ref(CurrentPresence);
+      const databaseRef = firebase.database().ref(profileId);
   
       // Set up the listener for value changes on the userId node
       const onDataChange = (snapshot) => {
@@ -113,7 +126,7 @@ console.log(CurrentPresence)
         databaseRef.off('value', onDataChange);
       };
     }
-  }, [CurrentPresence]);
+  }, [profileId]);
 
   return (
     <>
